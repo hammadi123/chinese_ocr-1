@@ -23,6 +23,7 @@ basemodel = Model(inputs=input, outputs=y_pred)
 
 modelPath = os.path.join(os.getcwd(), 'densenet/models/weights_densenet.h5')
 if os.path.exists(modelPath):
+    print("load model")
     basemodel.load_weights(modelPath)
 
 def decode(pred):
