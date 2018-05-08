@@ -6,8 +6,6 @@ import shutil
 import numpy as np
 from PIL import Image
 from glob import glob
-import preprocessImages as pp
-
 image_files = glob('./test_images/*.*')
 
 
@@ -18,7 +16,7 @@ if __name__ == '__main__':
     os.mkdir(result_dir)
 
     for image_file in sorted(image_files):
-        image = np.array(pp.processImages(Image.open(image_file)).convert('RGB'))
+        image = np.array(Image.open(image_file).convert('RGB'))
         t = time.time()
         result, image_framed = ocr_Pytorch.model(image)
         output_file = os.path.join(result_dir, image_file.split('/')[-1])
@@ -26,7 +24,4 @@ if __name__ == '__main__':
         print("Mission complete, it took {:.3f}s".format(time.time() - t))
         print("\nRecognition Result:\n")
         for key in result:
-            str = result[key][1].encode('utf-8')
-
-            print(str)
-#print(result[key][1])
+            print(result[key][1])
