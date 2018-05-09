@@ -78,7 +78,8 @@ function submitImage(url) {
                 console.log(data)
                 //alert(data.bounding_boxes[0])
                 //drawBoxOnCanvas(image, data)
-                document.getElementById("text").innerHTML = data
+
+                document.getElementById("text").innerHTML = data.replace(/曰/, "日")
             },
             error: function(data) {
                 console.log('fail')
@@ -87,114 +88,6 @@ function submitImage(url) {
 }
 }
 
-function draw() {
-    var c = document.getElementById("myCanvas");
-    var cxt = c.getContext("2d");
-    var img = new Image();
-
-    img.src = "/static/media/img/test.jpg"
-    img.onload = function() {
-        cxt.drawImage(img, 0, 0)
-        cxt.strokeStyle = "rgba(200, 0, 0, 0.9)"
-        cxt.strokeRect(100.32976430654526, 137.1965465694666, 236, 294)
-        //cxt.strokeRect(336.9286530315876, 430.32099076360464, 10, 10)
-        cxt.strokeRect(173, 267, 10, 10)
-        cxt.strokeRect(281, 271, 10, 10)
-        cxt.strokeRect(229, 345, 10, 10)
-        cxt.strokeRect(178, 369, 10, 10)
-        cxt.strokeRect(261, 369, 10, 10)
-    }
-}
-
-function drawBoxOnCanvas(image, response) {
-    var canvas = document.createElement("canvas");
-    canvas.width = image.width;
-    canvas.height = image.height;
-    var cxt = canvas.getContext("2d");
-
-    cxt.drawImage(image, 0, 0);
-    cxt.strokeStyle = "#3498DB";
-    cxt.fillStyle = "#FF1493";
-    cxt.lineWidth = 6;
-    cxt.lineJoin = 'round';
-
-    for (var i = 0; i < response.bounding_boxes.length; i++) {
-        var box = response.bounding_boxes[i]
-        var leftUp = [box[0], box[1]];
-        var rightDown = [box[2], box[3]];
-
-        cxt.strokeRect(leftUp[0], leftUp[1], rightDown[0] - leftUp[0], rightDown[1] - leftUp[1]);
-    }
-
-    for (var j = 0; j < response.landmarks.length; j++) {
-        for (var i = 0; i < response.landmarks[j].length; i++) {
-            var landmark = response.landmarks[j][i];
-
-            cxt.beginPath();
-            cxt.arc(landmark[0], landmark[1], 6, 0, 2 * Math.PI);
-            cxt.fill();
-        }
-    }
-
-
-    var newSrc = canvas.toDataURL("image/jpeg");
-
-    var labels = response.labels;
-    var similarities = response.similarity;
-    var label_container = document.getElementById("label_container");
-    label_container.innerHTML = "";
-    if(typeof(labels.length) != undefined && labels.length < 3) {
-        for(var i = 0; i < labels.length; i++) {
-            similarity = similarities[i];
-
-            var flag_content = "";
-            var label_content = labels[i];
-            if(similarity < 0.95) {
-                flag_content = "Bingo!!";
-                similarity = "Confidence: high";
-            } else if(similarity > 1.05) {
-                flag_content = "Can't locate your feature in our database..."
-                similarity = "";
-                label_content = "";
-            } else {
-                flag_content = "Maybe you are: "
-                similarity = "Confidence: medium";
-            }
-
-            var first_line = document.createElement("p");
-            var first_line_content = document.createTextNode(flag_content);
-            first_line.appendChild(first_line_content);
-            label_container.appendChild(first_line);
-
-            if(label_content != "") {
-
-                var second_line = document.createElement("p");
-                var second_line_content = document.createTextNode(label_content);
-                second_line.appendChild(second_line_content);
-
-                var b = document.createElement("br");
-                second_line.appendChild(b);
-                var third_line_content = document.createTextNode(similarity);
-                second_line.appendChild(third_line_content);
-                //var third_line_content = document.createTextNode(similarity);
-                //var third_line = document.createElement("p");
-                //third_line.appendChild(third_line_content);
-
-                label_container.appendChild(second_line);
-                //label_container.appendChild(third_line);
-            }
-            //label_container.appendChild(document.createElement("p").appendChild(document.createTextNode(label_content)));
-            //label_container.appendChild(document.createElement("p").appendChild(document.createTextNode("\n")));
-            //label_container.appendChild(document.createElement("p").appendChild(document.createTextNode(similarity)));
-
-        }
-    }
-
-    document.getElementById("json_container").innerHTML="";
-    document.getElementById("json_container").appendChild(document.createTextNode(JSON.stringify(response, null, 4)));
-    //document.getElementById("currentImg").setAttribute('src', newSrc);
-    //document.getElementById("currentImg").setAttribute('onclick', "");
-}
 var input = document.getElementById("upload_image");
 if (window.FileReader) {
     input.addEventListener("change", imageUpload, false);
@@ -236,35 +129,6 @@ function AutoResizeImage(maxWidth, maxHeight, objImg) {
     }
     objImg.height = h;
     objImg.width = w;
-}
-
-function activeCamera() {
-    Webcam.set({
-        width: 320,
-        height: 240,
-        dest_width: 640,
-        dest_height: 480,
-        image_format: 'jpeg',
-        jpeg_quality: 90,
-        force_flash: false,
-        flip_horiz: true,
-        fps: 45
-    });
-    Webcam.attach('#my_camera');
-    document.getElementById("snapshot_button").setAttribute("onclick", "close_camera()");
-    document.getElementById("snapshot_button").innerHTML = "<i class='camera retro icon'></i>Close Camera"
-}
-
-function take_snapshot() {
-    Webcam.snap( function(data_uri) {
-    submitImage(data_uri);
-    });
-}
-
-function close_camera() {
-    Webcam.reset();
-    document.getElementById("snapshot_button").setAttribute("onclick", "activeCamera()");
-    document.getElementById("snapshot_button").innerHTML = "<i class='camera retro icon'></i>Open Camera"
 }
 
 function submitImageURL() {

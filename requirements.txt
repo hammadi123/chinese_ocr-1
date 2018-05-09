@@ -13,5 +13,6 @@ pillow
 h5py
 lmdb
 mahotas
+PyYAML
 torchvision
 tensorflow==1.3

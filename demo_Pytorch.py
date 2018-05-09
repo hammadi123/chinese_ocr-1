@@ -1,11 +1,15 @@
 #-*- coding:utf-8 -*-
-import os
+from flask import Flask
+from flask import request
+from flask import render_template
 import ocr_Pytorch
 import time
 import shutil
 import numpy as np
 from PIL import Image
 from glob import glob
+import preprocessImages as pp
+
 image_files = glob('./test_images/*.*')
 
 
@@ -16,7 +20,7 @@ if __name__ == '__main__':
     os.mkdir(result_dir)
 
     for image_file in sorted(image_files):
-        image = np.array(Image.open(image_file).convert('RGB'))
+        image = np.array(pp.processImages(Image.open(image_file)).convert('RGB'))
         t = time.time()
         result, image_framed = ocr_Pytorch.model(image)
         output_file = os.path.join(result_dir, image_file.split('/')[-1])
