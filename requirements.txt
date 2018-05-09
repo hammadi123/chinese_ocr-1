@@ -1,0 +1,17 @@
+flask
+gunicorn
+gevent
+scipy
+numpy
+jupyter
+easydict
+Cython
+opencv-python
+keras==2.0.8
+matplotlib
+pillow
+h5py
+lmdb
+mahotas
+torchvision
+tensorflow==1.3
