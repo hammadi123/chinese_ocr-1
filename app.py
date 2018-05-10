@@ -32,11 +32,11 @@ def upload():
         for key in result:
             res = res + " " + result[key][1]
         print res
-
-        rst = {'res': res}
-        json_rst = json.dumps(rst).encode('utf-8')
+        print ###############
+        rst = {'res': res.encode('utf-8').replace('曰', '日')}
+        json_rst = json.dumps(rst, ensure_ascii=False)
         print json_rst
-        return res
+        return json_rst
 
 @app.route('/')
 def hello():

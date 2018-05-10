@@ -80,8 +80,13 @@ function submitImage(url) {
                 console.log(data)
                 //alert(data.bounding_boxes[0])
                 //drawBoxOnCanvas(image, data)
-
-                document.getElementById("text").innerHTML = data.replace(/曰/, "日")
+                var res = JSON.parse(data)
+                var content = res.res.split(" ")
+                var rst = ""
+                for(let i = 0; i < content.length; i++) {
+                    rst = rst + content[i] + "<br />";
+                }
+                document.getElementById("text").innerHTML = rst
             },
             error: function(data) {
                 console.log('fail')
