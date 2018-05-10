@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import os
+import json
 import ocr_Pytorch
 import time
 import shutil
@@ -24,4 +25,10 @@ if __name__ == '__main__':
         print("Mission complete, it took {:.3f}s".format(time.time() - t))
         print("\nRecognition Result:\n")
         for key in result:
-            print(result[key][1])
+            str = result[key][1].encode('utf-8')
+            content = str.decode('utf-8','ignore')
+            #dic = {'测试':str}
+            #print json.dumps(content)
+            #print json.dumps(dic,ensure_ascii=False)
+            
+            print(content)

@@ -10,7 +10,7 @@ def initTable(threshold=200):
         if i < threshold:
             table.append(0)
         else:
-            table.append(252)
+            table.append(255)
 
     return table
     
@@ -27,8 +27,8 @@ def padding(img):
     return result
     
 def processImages(img):
-    Img = reImage(img)
-    result = padding(Img)
+    #img = reImage(img)
+    result = padding(img)
     return result
 
         
