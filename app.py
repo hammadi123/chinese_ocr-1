@@ -18,7 +18,13 @@ app = Flask(__name__)
 def upload():
     if request.method == 'POST':
         im = request.files['image']
-        img = np.array(pp.processImages(Image.open(im)).convert('RGB'))
+        parameter = request.form['style']
+        
+        if(parameter == 'deploma'):
+            img = np.array(pp.processImages(Image.open(im)).convert('RGB'))
+        elif(parameter == 'general'):
+            img = np.array(Image.open(im).convert('RGB'))
+
         t = time.time()
         result, image_framed = ocr_Pytorch.model(img)
         res = ''

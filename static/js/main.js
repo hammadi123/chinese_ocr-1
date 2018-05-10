@@ -63,10 +63,12 @@ function submitImage(url) {
         var blob = convertBase64UrlToBlob(code);
 
         var myFile = new File([blob], "test.png")
-
+        
+        var stylePara = getValue();
         var formData = new FormData();
         formData.append('image', myFile);
-
+        formData.append('style', stylePara);
+     
         $.ajax({
             url: "/upload",
             type: 'POST',
@@ -134,4 +136,13 @@ function AutoResizeImage(maxWidth, maxHeight, objImg) {
 function submitImageURL() {
     var url = document.getElementById("online_image_url").value;
     submitImage(url);
+}
+
+function getValue(){
+    var radio = document.getElementsByName("style");
+    for (let i=0; i<radio.length; i++) {
+        if(radio[i].checked) {
+            return radio[i].value;
+        }
+    }
 }
